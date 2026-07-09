@@ -1,0 +1,30 @@
+version: '3.4'
+
+x-labels:
+  &default-labels
+  # constant (not $CI) so digests are reproducible across CI/local
+  org.supernetworks.ci: "true"
+  org.supernetworks.version: ${RELEASE_VERSION:-latest}${RELEASE_CHANNEL:-}
+
+services:
+  spr-reticulum:
+    container_name: spr-reticulum
+    image: ghcr.io/spr-networks/spr-reticulum:${RELEASE_VERSION:-latest}${RELEASE_CHANNEL:-}
+    build:
+      context: "${BUILDCTX:-.}"
+      labels: *default-labels
+    security_opt:
+      - no-new-privileges:true
+    networks:
+      reticulumnet:
+    volumes:
+      - "${SUPERDIR}./state/plugins/spr-reticulum:/state/plugins/spr-reticulum"
+      - "${SUPERDIR}./configs/base/config.sh:/configs/base/config.sh:ro"
+      - "${SUPERDIR}./configs/plugins/spr-reticulum:/configs/spr-reticulum"
+
+# Note: if updating the bridge name, also update gReticulumInterface in
+# code/reticulum_plugin.go and NetworkCapabilities.Interface in plugin.json.
+networks:
+  reticulumnet:
+    driver_opts:
+      com.docker.network.bridge.name: spr-reticulum
