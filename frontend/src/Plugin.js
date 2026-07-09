@@ -192,6 +192,9 @@ export default function Plugin() {
       <ListHeader
         title="Reticulum"
         description="Reticulum network stack node (rnsd)"
+        mark="rn"
+        status={status?.Running ? 'Running' : 'Stopped'}
+        statusAction={status?.Running ? 'success' : 'muted'}
       >
         <Button
           size="sm"
