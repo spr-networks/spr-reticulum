@@ -4,7 +4,7 @@
   "UnixPath": "/state/plugins/spr-reticulum/socket",
   "URI": "spr-reticulum",
   "HasUI": true,
-  "Icon": "BlocksIcon",
+  "Icon": "Rss",
   "SandboxedUI": false,
   "InstallTokenPath": "/configs/plugins/spr-reticulum/api-token",
   "NetworkCapabilities": {

@@ -26,5 +26,6 @@ services:
 # code/reticulum_plugin.go and NetworkCapabilities.Interface in plugin.json.
 networks:
   reticulumnet:
+    name: spr-reticulum
     driver_opts:
       com.docker.network.bridge.name: spr-reticulum
