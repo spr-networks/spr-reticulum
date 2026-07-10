@@ -1,5 +1,7 @@
 # spr-reticulum
 
+<img width="850" alt="spr-reticulum UI preview" src="docs/screenshot.png" />
+
 A [Reticulum](https://github.com/markqvist/Reticulum) network stack node plugin
 for [SPR (Secure Programmable Router)](https://github.com/spr-networks/super).
 
