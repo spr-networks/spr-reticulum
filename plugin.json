@@ -5,6 +5,7 @@
   "URI": "spr-reticulum",
   "HasUI": true,
   "Icon": "Rss",
+  "HasTopology": true,
   "SandboxedUI": false,
   "InstallTokenPath": "/configs/plugins/spr-reticulum/api-token",
   "NetworkCapabilities": {

@@ -30,6 +30,9 @@ socket — no network ports involved).
 - Status card with node state, RNS version, per-interface status and traffic
   (parsed from `rnstatus --json`, with a text-output fallback), path table
   viewer (`rnpath`), restart button
+- **Topology** — contributes its interface graph to SPR's router topology
+  view (`HasTopology`): one node per enabled RNS interface with live up/down
+  state, anchored to the router node
 - `RNodeInterface` / serial (LoRa radios) is future work — it needs USB
   passthrough into the container
 
@@ -67,6 +70,23 @@ All endpoints are served over the plugin unix socket
 | PUT    | `/config`     | Validate + save config, regenerate the RNS config and restart `rnsd`  |
 | POST   | `/restart`    | Restart `rnsd`                                                        |
 | GET    | `/path-table` | Known destination paths (`rnpath -t -j`); 503 while rnsd is down      |
+| GET    | `/topology`   | Topology graph for SPR's router topology view (see below)             |
+
+### Topology
+
+`plugin.json` sets `"HasTopology": true`, so SPR merges the plugin's graph
+into the router topology view. `GET /topology` returns
+`{"Nodes": [...], "Edges": [...]}`:
+
+- a `root` anchor node (`{"ID": "root", "ConnType": "reticulum", "Online": true}`)
+  that SPR attaches to the router node
+- one node per **enabled** configured interface (`Kind: "interface"`,
+  `Name` = type + target, e.g. `TCPClient rns.beleth.net:4242`), with
+  `Online` taken from the live `rnstatus` interface list; TCP client nodes
+  carry the target host in `IP`
+- one edge per interface toward `root` (`Layer: "rns"`, `Kind: "reticulum"`)
+
+While `rnsd` is down the graph contains only the root anchor.
 
 ## Configuration
 

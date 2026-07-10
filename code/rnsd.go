@@ -225,6 +225,25 @@ func parseRnstatusJSON(data []byte) (*rnstatusJSON, error) {
 	return &stats, nil
 }
 
+// toInterfaceStatuses converts parsed rnstatus JSON to the plugin's interface
+// status shape (shared by GET /status and the topology graph builder).
+func toInterfaceStatuses(stats *rnstatusJSON) []InterfaceStatus {
+	ifaces := []InterfaceStatus{}
+	for _, iface := range stats.Interfaces {
+		ifaces = append(ifaces, InterfaceStatus{
+			Name:      iface.Name,
+			ShortName: iface.ShortName,
+			Type:      iface.Type,
+			Online:    iface.Status,
+			Clients:   iface.Clients,
+			BitRate:   iface.Bitrate,
+			RXBytes:   iface.RXB,
+			TXBytes:   iface.TXB,
+		})
+	}
+	return ifaces
+}
+
 // parseRnstatusText is the fallback parser for the human readable rnstatus
 // output (used if --json is unavailable). Interface blocks look like:
 //
@@ -316,18 +335,7 @@ func collectStatus(d *RNSDaemon) NodeStatus {
 			status.RXBytes = stats.RXB
 			status.TXBytes = stats.TXB
 			status.TransportID = stats.TransportID
-			for _, iface := range stats.Interfaces {
-				status.Interfaces = append(status.Interfaces, InterfaceStatus{
-					Name:      iface.Name,
-					ShortName: iface.ShortName,
-					Type:      iface.Type,
-					Online:    iface.Status,
-					Clients:   iface.Clients,
-					BitRate:   iface.Bitrate,
-					RXBytes:   iface.RXB,
-					TXBytes:   iface.TXB,
-				})
-			}
+			status.Interfaces = toInterfaceStatuses(stats)
 			return status
 		}
 	}
