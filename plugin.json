@@ -1,6 +1,6 @@
 {
   "Name": "spr-reticulum",
-  "ComposeFilePath": "plugins/user/spr-reticulum/docker-compose.yml",
+  "ComposeFilePath": "plugins/user/spr-reticulum/docker-compose-krun.yml",
   "UnixPath": "/state/plugins/spr-reticulum/socket",
   "URI": "spr-reticulum",
   "HasUI": true,
@@ -9,7 +9,8 @@
   "SandboxedUI": false,
   "InstallTokenPath": "/configs/plugins/spr-reticulum/api-token",
   "NetworkCapabilities": {
-    "Interface": "spr-reticulum",
+    "Interface": "kreticulum0",
+    "DeviceMAC": "02:53:50:52:4b:0e",
     "Policies": ["wan", "dns"],
     "Groups": ["reticulum"]
   },

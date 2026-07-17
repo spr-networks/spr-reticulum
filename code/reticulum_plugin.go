@@ -9,11 +9,11 @@ import (
 	"path/filepath"
 )
 
-var UNIX_PLUGIN_LISTENER = TEST_PREFIX + "/state/plugins/spr-reticulum/socket"
+var UNIX_PLUGIN_LISTENER = TEST_PREFIX + "/run/spr-krun-plugin/spr-reticulum.sock"
 
 // the name of the docker bridge for this plugin (see docker-compose.yml and
 // plugin.json NetworkCapabilities.Interface).
-var gReticulumInterface = "spr-reticulum"
+var gReticulumInterface = "kreticulum0"
 
 var gDaemon = &RNSDaemon{}
 
