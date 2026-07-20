@@ -1,6 +1,6 @@
 {
   "Name": "spr-reticulum",
-  "ComposeFilePath": "plugins/user/spr-reticulum/docker-compose-krun.yml",
+  "Runtime": "kvm",
   "UnixPath": "/state/plugins/spr-reticulum/socket",
   "URI": "spr-reticulum",
   "HasUI": true,
