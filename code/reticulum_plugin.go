@@ -13,7 +13,7 @@ var UNIX_PLUGIN_LISTENER = TEST_PREFIX + "/run/spr-krun-plugin/spr-reticulum.soc
 
 // the name of the docker bridge for this plugin (see docker-compose.yml and
 // plugin.json NetworkCapabilities.Interface).
-var gReticulumInterface = "kreticulum0"
+var gReticulumInterface = "spr-reticulum"
 
 var gDaemon = &RNSDaemon{}
 

@@ -9,7 +9,7 @@
   "SandboxedUI": false,
   "InstallTokenPath": "/configs/plugins/spr-reticulum/api-token",
   "NetworkCapabilities": {
-    "Interface": "kreticulum0",
+    "Interface": "spr-reticulum",
     "DeviceMAC": "02:53:50:52:4b:0e",
     "Policies": ["wan", "dns"],
     "Groups": ["reticulum"]
