@@ -1,7 +1,7 @@
 {
   "Name": "spr-reticulum",
   "Runtime": "kvm",
-  "UnixPath": "/state/plugins/spr-reticulum/socket",
+  "UnixPath": "/state/plugins/spr-reticulum/socket.sock",
   "URI": "spr-reticulum",
   "HasUI": true,
   "Icon": "Rss",

@@ -62,7 +62,7 @@ container and registers it on the `spr-reticulum` custom interface with
 ## API
 
 All endpoints are served over the plugin unix socket
-(`/state/plugins/spr-reticulum/socket`) and proxied by the SPR API at
+(`/state/plugins/spr-reticulum/socket.sock`) and proxied by the SPR API at
 `/plugins/spr-reticulum/...` (Bearer auth handled by SPR).
 
 | Method | Path          | Description                                                          |
