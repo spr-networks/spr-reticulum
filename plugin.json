@@ -1,14 +1,15 @@
 {
   "Name": "spr-reticulum",
-  "ComposeFilePath": "plugins/user/spr-reticulum/docker-compose.yml",
+  "Runtime": "kvm",
   "UnixPath": "/state/plugins/spr-reticulum/socket",
   "URI": "spr-reticulum",
   "HasUI": true,
   "Icon": "Rss",
   "HasTopology": true,
-  "SandboxedUI": false,
+  "SandboxedUI": true,
   "NetworkCapabilities": {
     "Interface": "spr-reticulum",
+    "DeviceMAC": "02:53:50:52:4b:0e",
     "Policies": ["wan", "dns"],
     "Groups": ["reticulum"]
   },

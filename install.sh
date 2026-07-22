@@ -41,10 +41,25 @@ EOF
 chmod 600 "$SUPERDIR/configs/plugins/spr-reticulum/config.json"
 fi
 
-./build_docker_compose.sh
-docker compose up -d
+KRUN_MAC="02:53:50:52:4b:0e"
+PLUGIN_INTERFACE="spr-reticulum"
+curl --fail-with-body --silent --show-error "http://127.0.0.1/device?identity=${KRUN_MAC}" \
+  -H "Authorization: Bearer ${SPR_API_TOKEN}" -H "Content-Type: application/json" \
+  -X PUT --data-raw "{\"MAC\":\"${KRUN_MAC}\",\"Name\":\"spr-reticulum\",\"Policies\":[\"wan\",\"dns\"],\"Groups\":[\"reticulum\"]}" >/dev/null
+if ! sudo nft get element inet filter dhcp_access "{ \"${PLUGIN_INTERFACE}\" . ${KRUN_MAC} }" >/dev/null 2>&1; then
+  sudo nft add element inet filter dhcp_access "{ \"${PLUGIN_INTERFACE}\" . ${KRUN_MAC} : accept }"
+fi
 
-CONTAINER_IP=$(docker inspect --format '{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' "spr-reticulum")
+./build_docker_compose.sh
+docker compose -f docker-compose-kvm.yml up -d
+
+CONTAINER_IP=
+for _ in $(seq 1 30); do
+  CONTAINER_IP="$(jq -r --arg mac "$KRUN_MAC" '.[$mac].RecentIP // empty' "$SUPERDIR/state/public/devices-public.json")"
+  [ -n "$CONTAINER_IP" ] && break
+  sleep 1
+done
+[ -n "$CONTAINER_IP" ] || { echo "spr-reticulum did not obtain an SPR DHCP lease" >&2; exit 1; }
 API=127.0.0.1
 
 # register the container on the spr-reticulum custom interface so it gets
@@ -52,6 +67,6 @@ API=127.0.0.1
 curl "http://${API}/firewall/custom_interface" \
 -H "Authorization: Bearer ${SPR_API_TOKEN}" \
 -X 'PUT' \
---data-raw "{\"SrcIP\":\"${CONTAINER_IP}\",\"Interface\":\"spr-reticulum\",\"Policies\":[\"wan\",\"dns\"],\"Groups\":[\"reticulum\"]}"
+--data-raw "{\"SrcIP\":\"${CONTAINER_IP}\",\"Interface\":\"${PLUGIN_INTERFACE}\",\"Policies\":[\"wan\",\"dns\"],\"Groups\":[\"reticulum\"]}"
 
-docker compose restart
+docker compose -f docker-compose-kvm.yml restart
