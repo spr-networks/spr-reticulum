@@ -7,7 +7,6 @@
   "Icon": "Rss",
   "HasTopology": true,
   "SandboxedUI": false,
-  "InstallTokenPath": "/configs/plugins/spr-reticulum/api-token",
   "NetworkCapabilities": {
     "Interface": "spr-reticulum",
     "Policies": ["wan", "dns"],
