@@ -9,7 +9,7 @@ x-labels:
 services:
   spr-reticulum:
     container_name: spr-reticulum
-    image: ghcr.io/spr-networks/spr-reticulum:${RELEASE_VERSION:-latest}${RELEASE_CHANNEL:-}
+    image: ghcr.io/spr-networks/spr-reticulum:latest
     build:
       context: "${BUILDCTX:-.}"
       labels: *default-labels
