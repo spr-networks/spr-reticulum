@@ -4,6 +4,7 @@ services:
       file: docker-compose.yml
       service: spr-reticulum
     image: ghcr.io/spr-networks/spr-reticulum:latest
+    build: !reset null
     runtime: ${SPR_KRUN_RUNTIME:-spr-krun}
     annotations:
       krun.cpus: "${SPR_KRUN_CPUS:-1}"
@@ -27,3 +28,4 @@ networks:
     name: spr-reticulum
     driver_opts:
       com.docker.network.bridge.name: spr-reticulum
+      com.docker.network.bridge.inhibit_ipv4: "true"
