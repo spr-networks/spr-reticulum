@@ -9,7 +9,14 @@ import (
 	"path/filepath"
 )
 
-var UNIX_PLUGIN_LISTENER = TEST_PREFIX + "/run/spr-krun-plugin/spr-reticulum.sock"
+var UNIX_PLUGIN_LISTENER = TEST_PREFIX + "/state/plugins/spr-reticulum/socket.sock"
+
+func pluginSocketPath() string {
+	if path := os.Getenv("SPR_KRUN_PLUGIN_SOCKET"); path != "" {
+		return path
+	}
+	return UNIX_PLUGIN_LISTENER
+}
 
 // the name of the docker bridge for this plugin (see docker-compose.yml and
 // plugin.json NetworkCapabilities.Interface).
@@ -133,12 +140,16 @@ func main() {
 	mux.HandleFunc("GET /topology", handleGetTopology)
 	mux.Handle("/", spaHandler{staticPath: "/ui", indexPath: "index.html"})
 
-	os.Remove(UNIX_PLUGIN_LISTENER)
-	listener, err := net.Listen("unix", UNIX_PLUGIN_LISTENER)
+	socketPath := pluginSocketPath()
+	os.Remove(socketPath)
+	if err := os.MkdirAll(filepath.Dir(socketPath), 0755); err != nil {
+		panic(err)
+	}
+	listener, err := net.Listen("unix", socketPath)
 	if err != nil {
 		panic(err)
 	}
-	if err := os.Chmod(UNIX_PLUGIN_LISTENER, 0770); err != nil {
+	if err := os.Chmod(socketPath, 0770); err != nil {
 		panic(err)
 	}
 
